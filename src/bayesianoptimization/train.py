@@ -2,7 +2,9 @@ from bayesianoptimization.model import CNNModel
 from bayesianoptimization.data import MyDataset
 from skopt.space import Integer, Real
 from skopt import gp_minimize, dummy_minimize
+import torch 
 
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 search_space = [
     Integer(2, 20, name = 'depth'),
@@ -18,6 +20,7 @@ def objective(params):
         kernel_size=kernel_size,
         dropout_rate=dropout_rate
     )
+    model = model.to(device)
 
     validation_score = "INDSÆT TRÆNINGSFUNKTIONEN HER"
 
