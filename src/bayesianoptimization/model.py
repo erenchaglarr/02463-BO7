@@ -2,11 +2,11 @@ from torch import nn
 import torch
 
 class CNNModel(nn.Module):
-    def __init__(self, num_conv_blocks=3, kernel_size=3, dropout_rate=0.3):
+    def __init__(self, depth=3, kernel_size=3, dropout_rate=0.3):
         super().__init__()
         layers = []
         in_channels = 1
-        for _ in range(num_conv_blocks):
+        for _ in range(depth):
             layers.append(nn.Conv2d(in_channels, 32, kernel_size=kernel_size, padding=1))
             layers.append(nn.ReLU())
             layers.append(nn.MaxPool2d(2))

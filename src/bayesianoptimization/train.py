@@ -5,9 +5,9 @@ from skopt import gp_minimize, dummy_minimize
 
 
 search_space = [
-    Integer(2, 5, 10, 20, name = 'depth'),
-    Integer(3, 5, 7, 9, name = "kernel_size"),
-    Real(0.0, 0.1, 0.3, 0.5, name = "dropout_rate")
+    Integer(2, 20, name = 'depth'),
+    Integer(3, 9, name = "kernel_size"),
+    Real(0.0, 0.5, name = "dropout_rate")
 ]
 
 def objective(params):
