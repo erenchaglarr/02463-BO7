@@ -14,16 +14,7 @@ search_space = [
 
 def objective(params):
     depth, kernel_size, dropout_rate = params
-
-    model = CNNModel(
-        depth=depth,
-        kernel_size=kernel_size,
-        dropout_rate=dropout_rate
-    )
-    model = model.to(device)
-
-    validation_score = "INDSÆT TRÆNINGSFUNKTIONEN HER"
-
+    validation_score = (depth, kernel_size, dropout_rate)
     return validation_score
 
 results_ei = gp_minimize(
@@ -52,10 +43,14 @@ results_random = dummy_minimize(
 )
 
 
-def train():
+def train(depth, kernel_size, dropout_rate):
     dataset = MyDataset("data/omniglot-py/images_background")
-    model = CNNModel()
-    # add rest of your training code here
+    model = CNNModel(
+        depth=depth,
+        kernel_size=kernel_size,
+        dropout_rate=dropout_rate
+    )
+    model = model.to(device)
 
 if __name__ == "__main__":
     train()
