@@ -1,9 +1,6 @@
 from bayesianoptimization.model import Model
 from bayesianoptimization.data import MyDataset
 
-
-
-
 def train():
     dataset = MyDataset("data/raw")
     model = Model()
