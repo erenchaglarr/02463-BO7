@@ -50,7 +50,7 @@ results_random = dummy_minimize(
 
 
 def train():
-    dataset = MyDataset("data/raw")
+    dataset = MyDataset("data/omniglot-py/images_background")
     model = CNNModel()
     # add rest of your training code here
 
