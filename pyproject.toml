@@ -24,13 +24,12 @@ dependencies = [
   "typer==0.15.1",
   "uvicorn==0.34.0",
 
-  # --- PyTorch: cross-platform, reproducible ---
-  # On macOS (incl Apple Silicon), install the default PyPI wheels (CPU / MPS-capable builds).
+  # --- PyTorch (reproducible across OSes) ---
+  # macOS: use regular PyPI wheels (CPU / MPS backend on Apple Silicon)
   "torch==2.6.0; sys_platform == 'darwin'",
   "torchvision==0.21.0; sys_platform == 'darwin'",
 
-  # On Linux/Windows, use CUDA 12.4 wheels from the PyTorch index.
-  # NOTE: the "+cu124" local version tag is important so uv picks the CUDA builds.
+  # Linux + Windows: use CUDA 12.4 wheels
   "torch==2.6.0+cu124; sys_platform != 'darwin'",
   "torchvision==0.21.0+cu124; sys_platform != 'darwin'",
 ]
@@ -47,16 +46,16 @@ dev = [
   "mkdocstrings-python==2.0.1",
 ]
 
-# Make the PyTorch CUDA index available but *explicit* so uv won't pull random deps (like requests) from it.
+# PyTorch CUDA index: make it explicit so it is ONLY used when a package is mapped to it
 [[tool.uv.index]]
 name = "pytorch-cu124"
 url = "https://download.pytorch.org/whl/cu124"
 explicit = true
 
-# Tell uv: only resolve the CUDA-tagged torch/torchvision from that explicit index.
+# Route torch/torchvision to the CUDA index (works because CUDA versions are requested via +cu124 above)
 [tool.uv.sources]
-"torch==2.6.0+cu124" = { index = "pytorch-cu124" }
-"torchvision==0.21.0+cu124" = { index = "pytorch-cu124" }
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
 
 [tool.ruff]
 line-length = 120
