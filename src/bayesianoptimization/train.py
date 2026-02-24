@@ -210,6 +210,7 @@ if __name__ == "__main__":
 
     # Build loaders once
     TRAIN_LOADER, VAL_LOADER, NUM_CLASSES = build_dataloaders(data_root="data", batch_size=32)
+    print(f"num clas: {NUM_CLASSES}")
 
     # Bayesian optimization with Expected Improvement
     results_ei = gp_minimize(
