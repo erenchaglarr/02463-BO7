@@ -9,6 +9,7 @@ from skopt.space import Categorical, Integer, Real
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 from torchvision.datasets import Omniglot
+from types import SimpleNamespace
 
 # Robust imports (works both as package and direct script)
 try:
@@ -48,6 +49,7 @@ search_space = [
 TRAIN_LOADER = None
 VAL_LOADER = None
 NUM_CLASSES = None
+
 
 
 def build_dataloaders(
@@ -165,6 +167,42 @@ def train_model(depth: int, kernel_size: int, dropout_rate: float) -> float:
     print(f"depth={depth}, kernel={kernel_size}, dropout={dropout_rate:.3f} -> val_acc={accuracy:.4f}")
     return accuracy
 
+def random_search_minimize(func, dimensions, n_calls=20, random_state=42):
+    """
+    Simple random search replacement for skopt.dummy_minimize
+    (avoids sklearn/skopt compatibility issues).
+    Returns an object with .fun and .x like skopt results.
+    """
+    from skopt.space import Space
+
+    rng = np.random.RandomState(random_state)
+    space = Space(dimensions)
+
+    best_x = None
+    best_fun = float("inf")
+    x_iters = []
+    func_vals = []
+
+    for i in range(n_calls):
+        x = space.rvs(random_state=rng)[0]   # one sampled point
+        y = func(x)
+
+        x_iters.append(x)
+        func_vals.append(y)
+
+        if y < best_fun:
+            best_fun = y
+            best_x = x
+
+        print(f"[Random {i+1}/{n_calls}] x={x} -> objective={y:.4f}")
+
+    return SimpleNamespace(
+        x=best_x,
+        fun=best_fun,
+        x_iters=x_iters,
+        func_vals=np.array(func_vals),
+    )
+
 
 if __name__ == "__main__":
     # Safe to call repeatedly; won't re-download if already present
@@ -194,12 +232,12 @@ if __name__ == "__main__":
     )
 
     # Random search baseline
-    results_random = dummy_minimize(
-        func=objective,
-        dimensions=search_space,
-        n_calls=20,
-        random_state=42,
-    )
+    results_random = random_search_minimize(
+    func=objective,
+    dimensions=search_space,
+    n_calls=20,
+    random_state=42,
+)
 
     print("\n=== Results ===")
     print("Best EI accuracy:", -results_ei.fun, "params:", results_ei.x)
