@@ -19,7 +19,6 @@ dependencies = [
   "scikit-optimize>=0.10.2",
   "typer==0.15.1",
   "uvicorn==0.34.0",
-
   # Same versions everywhere
   "torch==2.6.0",
   "torchvision==0.21.0",
