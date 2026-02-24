@@ -1,5 +1,5 @@
 from bayesianoptimization.model import CNNModel
-from bayesianoptimization.data import MyDataset
+from data import MyDataset
 from skopt.space import Integer, Real
 from skopt import gp_minimize, dummy_minimize
 import torch
